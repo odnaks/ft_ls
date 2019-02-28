@@ -15,18 +15,57 @@ int	init_struct(t_ls *ls)
 	return (0);
 }
 
-int		is_file(const char* name)
+int		count_files(const char* path)
 {
-	DIR* directory;
+	DIR *d;
+	int count;
+	struct dirent *dir;
+	count = 0;
 
-	opendir(name);
-	if (directory != NULL)
+	d = opendir(path);
+	if (d)
 	{
-		closedir(directory);
-		return (2);
+		while ((dir = readdir(d)) != NULL)
+			count++;
+		closedir(d);
 	}
-	if (errno == ENOTDIR)
-		return (1);
+	return (count);
+}
+
+// int		is_file(const char* name)
+// {
+// 	DIR* directory;
+
+// 	opendir(name);
+// 	if (directory != NULL)
+// 	{
+// 		closedir(directory);
+// 		return (2);
+// 	}
+// 	if (errno == ENOTDIR)
+// 		return (1);
+// }
+int		obj_type(const char* path)
+{
+	struct stat path_stat;
+	stat(path, &path_stat);
+
+	if ((path_stat.st_mode & S_IFMT) == S_IFREG)
+		return (0); //regular file
+	else if ((path_stat.st_mode & S_IFMT) == S_IFDIR)
+		return(1); //directory
+	else if ((path_stat.st_mode & S_IFMT) == S_IFCHR)
+		return(2); //character device
+	else if ((path_stat.st_mode & S_IFMT) == S_IFBLK)
+		return(3); //block device
+	else if ((path_stat.st_mode & S_IFMT) == S_IFIFO)
+		return(4); //FIFO/pipe
+	else if ((path_stat.st_mode & S_IFMT) == S_IFLNK)
+		return(5); //symlink
+	else if ((path_stat.st_mode & S_IFMT) == S_IFSOCK)
+		return(7); //socket
+	else
+		return(-1); //unknown
 }
 
 void	put_usage(char a)
@@ -70,28 +109,52 @@ int	flags(char *args, t_ls *ls)
 	return (0);
 }
 
-int files(char *args, t_ls *ls)
+int push_files(char *args, t_ls *ls)
 {
 	int len = ft_strlen(args);
 
 	if (len > ls->max)
 		ls->max = len;
-	ls->args[ls->index] = malloc(sizeof(char) * (len + 1));
-	ls->args[ls->index][len] = '\0';
+	ls->files[ls->index_f] = malloc(sizeof(char) * (len + 1));
+	ls->files[ls->index_f][len] = '\0';
 	int i = 0;
 	while (i < len)
 	{
-		ls->args[ls->index][i] = args[i];
+		ls->files[ls->index_f][i] = args[i];
 		i++;
 	}
-	(ls->index)++;
+	(ls->index_f)++;
 	return (0);
+}
+
+int push_dir(char *args, t_ls *ls)
+{
+	int len = ft_strlen(args);
+
+	ls->dir[ls->index_d] = malloc(sizeof(char) * (len + 1));
+	ls->dir[ls->index_d][len] = '\0';
+	int i = 0;
+	while (i < len)
+	{
+		ls->dir[ls->index_d][i] = args[i];
+		i++;
+	}
+	(ls->index_d)++;
+	return (0);
+}
+
+void malloc_dir(int n, t_ls *ls)
+{
+	ls->dir = malloc(sizeof(char*) * (n + 1));
+	ls->dir[n] = NULL;
+	ls->index_d = 0;
 }
 
 void malloc_files(int n, t_ls *ls)
 {
-	ls->args = malloc(sizeof(char*) * n);
-	ls->args[n] = NULL;
+	ls->files = malloc(sizeof(char*) * (n + 1));
+	ls->files[n] = NULL;
+	ls->index_f = 0;
 }
 
 int get_time(char *f1, char *f2)
@@ -113,27 +176,27 @@ int sort(t_ls *ls)
 	int j;
 
 	i = 0;
-	while (i < ls->index - 1)
+	while (i < ls->index_f - 1)
 	{
 		j = i + 1;
 		while (j < ls->index)
 		{
 			if (ls->t)
 			{
-				if (get_time ((ls->args[i]), (ls->args[j])) > 0)
+				if (get_time ((ls->files[i]), (ls->files[j])) > 0)
 				{
-					char *tmp = ls->args[i];
-					ls->args[i] = ls->args[j];
-					ls->args[j] = tmp;
+					char *tmp = ls->files[i];
+					ls->files[i] = ls->files[j];
+					ls->files[j] = tmp;
 				}
 			}
 			else
 			{
 				if (ft_strcmp((ls->args[i]), (ls->args[j])) > 0)
 				{
-					char *tmp = ls->args[i];
-					ls->args[i] = ls->args[j];
-					ls->args[j] = tmp;
+					char *tmp = ls->files[i];
+					ls->files[i] = ls->files[j];
+					ls->files[j] = tmp;
 				}
 			}
 			j++;
@@ -153,17 +216,37 @@ int parcer(t_ls *ls, int argc, char **argv)
 	}
 
 	//ф-ия, которая считает кол-во файлов и директори
-	
-
-
+	int	c_f = 0;
+	int	c_d = 0;
+	int	j = i;
+	int temp_argc = argc;
+	while (temp_argc > 1)
+	{
+		if (obj_type(argv[j]) == 0)
+			c_f++;
+		else
+			c_d++;
+		j++;
+		temp_argc--;
+	}
+	if (c_f > 0)
+		malloc_files(c_f, ls);
+	if (c_d > 0)
+		malloc_dir(c_d, ls);
+	/* 
 	if (argc > 1)
 	{
 		int n = argc;
 		malloc_files(n, ls);
-	}
+	} */
 	while (argc > 1)
 	{
-		files(argv[i], ls);
+		//file or dir
+		printf("%d\n", obj_type(argv[i]));
+		if (obj_type(argv[j]) == 0)
+			push_files(argv[i], ls);
+		else
+			push_dir(argv[i], ls);
 		argc--; 
 		i++;
 	}
@@ -182,7 +265,7 @@ int	format_rows(t_ls *ls)
 	max = ls->max + (8 - (ls->max % 8));
 	int count_col = width / max;
 
-	int max_row = max_rows(count_col, ls->index);
+	int max_row = max_rows(count_col, ls->index_f);
 
 	int i = 0;
 	int j;
@@ -192,8 +275,8 @@ int	format_rows(t_ls *ls)
 		while (k < count_col)
 		{
 			j = i + k * max_row;
-			if (j < ls->index)
-				printf("%-*s", max, ls->args[j]);
+			if (j < ls->index_f)
+				printf("%-*s", max, ls->files[j]);
 			k++;
 		}
 		printf("\n");
@@ -204,16 +287,25 @@ int	format_rows(t_ls *ls)
 	return (0);
 }
 
+void ls_files(t_ls *ls)
+{
+	sort(ls);
+	format_rows(ls);
+}
+
+/* void ls_dir(t_ls *ls)
+{
+
+} */
+
 
 int	ft_ls(t_ls *ls, int argc, char **argv)
 {
 	parcer(ls, argc, argv);
-
 	//делит на 2 массива
 
-	
-	sort(ls);
-	format_rows(ls);
+	ls_files(ls);
+	//ls_dir(ls);
 
 	return (0);
 }

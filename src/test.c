@@ -1,64 +1,34 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <dirent.h>
 #include <stdio.h>
 
-/* 
-S_ISDIR == directory
-S_ISFIFO == fifo or socket
-S_ISREG == regular file
-S_ISLNK == symbolic link
-S_ISSOCK == socket
-*/
-
-int		file_type(const char* path)
-{
-	struct stat path_stat;
-	stat(path, &path_stat);
-
-	switch (path_stat.st_mode & S_IFMT) 
-	{
-		case S_IFBLK:
-			printf("block device\n");
-			break;
-		case S_IFCHR:
-			printf("character device\n");
-			break;
-		case S_IFDIR:
-			printf("directory\n");
-			break;
-		case S_IFIFO:
-			printf("FIFO/pipe\n");
-			break;
-		case S_IFLNK:
-			printf("symlink\n");
-			break;
-		case S_IFREG:
-			printf("regular file\n");
-			break;
-		case S_IFSOCK:
-			printf("socket\n");
-			break;
-		default:
-			printf("unknown?\n");
-			break;
-	}
-}
 
 int main(int argc, char **argv, char **envp)
 {
+	DIR *d;
+	int count;
+	struct dirent *dir;
+	count = 0;
+
+	d = opendir(".");
+	if (d)
+	{
+		while ((dir = readdir(d)) != NULL)
+		{
+			count++;
+			printf("%s\n", dir->d_name);
+		}
+		closedir(d);
+	}
+	return (count);
 
 
 
-	file_type("src/main.c");
 
 
-
-
-
-
-
-
+//printf("%s\n", dir->d_name);
 
 
 /* 	DIR *a;
