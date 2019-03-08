@@ -11,6 +11,8 @@ int	init_struct(t_ls *ls)
 	ls->max = 0;
 	ls->index_f = 0;
 	ls->index_d = 0;
+	ls->rec = 0;
+	ls->max = 0;
 
 	return (0);
 }
@@ -104,4 +106,83 @@ int get_time(char *f1, char *f2)
 	if (s1.st_ctime > s2.st_ctime)
 		return (1);
 	return (0);
+}
+
+void free_files(t_ls *ls)
+{
+	int i = 0;
+	while (i < ls->index_f)
+	{
+		free(ls->files[i]);
+		i++;
+	}
+	free(ls->files);
+}
+
+void free_dirs(t_ls *ls)
+{
+	int i = 0;
+	while (i < ls->index_d)
+	{
+		free(ls->dir[i]);
+		i++;
+	}
+	free(ls->dir);
+}
+
+int ft_strlen_two(char **a)
+{
+	int i = 0;
+	while (a[i])
+		i++;
+	return (i);
+}
+
+int		count_files(const char* path)
+{
+	DIR *d;
+	int count;
+	struct dirent *dir;
+	count = 0;
+
+	d = opendir(path);
+	if (d)
+	{
+		while ((dir = readdir(d)) != NULL)
+		{
+			if (dir->d_name[0] != '.')
+				count++; // printf("%s\n", dir->d_name);
+		}
+		closedir(d);
+	}
+	return (count);
+}
+
+int		is_exist(const char* path)
+{
+	struct stat path_stat;
+
+	return (stat(path, &path_stat) == 0);
+}
+
+int		get_attr(const char* path)
+{
+	acl_t acl = NULL;
+	acl_entry_t dummy;
+	ssize_t xattr = 0;
+
+	acl = acl_get_link_np(path, ACL_TYPE_EXTENDED);
+	if (acl && acl_get_entry(acl, ACL_FIRST_ENTRY, &dummy) == -1) {
+		acl_free(acl);
+		acl = NULL;
+	}
+	xattr = listxattr(path, NULL, 0, XATTR_NOFOLLOW);
+	if (xattr < 0)
+		xattr = 0;
+	if (xattr > 0)
+		return (1); // @
+	else if (acl != NULL)
+		return (2); // +
+	else
+		return (0);
 }
