@@ -6,7 +6,7 @@
 /*   By: drestles <drestles@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/24 14:53:44 by pcollio-          #+#    #+#             */
-/*   Updated: 2019/03/08 20:07:22 by drestles         ###   ########.fr       */
+/*   Updated: 2019/03/09 04:29:39 by drestles         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ typedef struct s_ls {
 	int		index_d;
 	int		max;
 	int		rec;
+	int		er;
 }				t_ls;
 
 int			init_struct(t_ls *ls);
@@ -58,7 +59,7 @@ int			get_time(char *f1, char *f2);
 void		free_files(t_ls *ls);
 void		free_dirs(t_ls *ls);
 int			ft_strlen_two(char **a);
-int			count_files(const char* path);
+int			count_files(const char* path, t_ls *ls);
 int			parcer(t_ls *ls, int argc, char **argv);
 int			is_exist(const char* path);
 int			get_attr(const char* path);

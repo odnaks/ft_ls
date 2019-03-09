@@ -13,6 +13,7 @@ int	init_struct(t_ls *ls)
 	ls->index_d = 0;
 	ls->rec = 0;
 	ls->max = 0;
+	ls->er = 0;
 
 	return (0);
 }
@@ -138,7 +139,7 @@ int ft_strlen_two(char **a)
 	return (i);
 }
 
-int		count_files(const char* path)
+int		count_files(const char* path, t_ls *ls)
 {
 	DIR *d;
 	int count;
@@ -150,7 +151,7 @@ int		count_files(const char* path)
 	{
 		while ((dir = readdir(d)) != NULL)
 		{
-			if (dir->d_name[0] != '.')
+			if (dir->d_name[0] != '.' || ls->a)
 				count++; // printf("%s\n", dir->d_name);
 		}
 		closedir(d);
