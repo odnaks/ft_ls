@@ -6,7 +6,7 @@
 /*   By: drestles <drestles@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/10 10:01:49 by drestles          #+#    #+#             */
-/*   Updated: 2019/03/10 15:33:14 by drestles         ###   ########.fr       */
+/*   Updated: 2019/03/10 16:04:15 by drestles         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,10 @@ int		format_rows(t_ls *ls)
 		{
 			j = i + k * format.max_row;
 			if (j < ls->index_f)
-				printf("%-*s", format.max, ls->files[j]);
+				ft_printf("%-*s", format.max, ls->files[j]);
 			k++;
 		}
-		printf("\n");
+		ft_printf("\n");
 	}
 	return (0);
 }
@@ -72,10 +72,10 @@ int		format_rows_objs(char **objs, int n, t_ls *ls)
 		{
 			j = i + k * format.max_row;
 			if (j < n)
-				printf("%-*s", format.max, objs[j]);
+				ft_printf("%-*s", format.max, objs[j]);
 			k++;
 		}
-		printf("\n");
+		ft_printf("\n");
 	}
 	return (0);
 }
@@ -122,13 +122,10 @@ int		l_format_rows(t_ls *ls)
 		format.group = get_group(ls->files[i]);
 		format.date = get_last_time(ls->files[i]);
 		format.name = put_link(ls->files[i]);
-		printf("%s %*d %*s %*s %*lld %s %s\n", format.chmod, format.max0,
+		ft_printf("%s %*d %*s %*s %*lld %s %s\n", format.chmod, format.max0,
 		vtorya_hernya(ls->files[i]), format.max1, format.user, format.max2,
 		format.group, format.max5, get_size(ls->files[i]),
 		format.date, format.name);
-		free(format.name);
-		free(format.chmod);
-		free(format.date);
 		i++;
 	}
 	return (0);

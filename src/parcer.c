@@ -6,7 +6,7 @@
 /*   By: drestles <drestles@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/10 13:47:04 by drestles          #+#    #+#             */
-/*   Updated: 2019/03/10 14:45:51 by drestles         ###   ########.fr       */
+/*   Updated: 2019/03/10 16:00:56 by drestles         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void		put_usage(char a)
 {
-	printf("ls: illegal option -- %c\n", a);
-	printf("usage: ls [-lrRat] [file ...]");
+	ft_printf("ls: illegal option -- %c\n", a);
+	ft_printf("usage: ls [-lrRat] [file ...]");
 	exit(1);
 }
 
@@ -25,7 +25,7 @@ static void	count_obj(int argc, char **argv, int j, t_ls *ls)
 	{
 		if (is_exist(argv[j]) == 0)
 		{
-			printf("ls: %s: No such file or directory\n", argv[j]);
+			ft_printf("ls: %s: No such file or directory\n", argv[j]);
 			ls->er = 1;
 		}
 		else if (obj_type(argv[j]) == 1)

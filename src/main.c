@@ -6,7 +6,7 @@
 /*   By: drestles <drestles@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/10 10:01:40 by drestles          #+#    #+#             */
-/*   Updated: 2019/03/10 15:35:32 by drestles         ###   ########.fr       */
+/*   Updated: 2019/03/10 16:00:39 by drestles         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ static char	**ls_rec_init(t_ls *ls, char *str, int *n)
 		free(ls->path);
 	ls->path = ft_strjoin(str, "/");
 	if (ls->rec || ls->index_f)
-		printf("\n%s:\n", str);
+		ft_printf("\n%s:\n", str);
 	else if (ls->index_d > 1 || ls->er)
-		printf("%s:\n", str);
+		ft_printf("%s:\n", str);
 	*n = count_files(str, ls);
 	objs = malloc(sizeof(char*) * (*n + 1));
 	objs[*n] = 0;

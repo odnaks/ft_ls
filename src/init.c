@@ -6,7 +6,7 @@
 /*   By: drestles <drestles@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/10 11:20:38 by pcollio-          #+#    #+#             */
-/*   Updated: 2019/03/10 15:34:03 by drestles         ###   ########.fr       */
+/*   Updated: 2019/03/10 16:00:16 by drestles         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void		ls_dir(t_ls *ls)
 		n = count_files(ls->dir[k], ls);
 		free_files(ls);
 		malloc_files(n, ls);
-		printf("\n%s:\n", ls->dir[k]);
+		ft_printf("\n%s:\n", ls->dir[k]);
 		push_dir_files(ls->dir[k], ls);
 		k++;
 	}
