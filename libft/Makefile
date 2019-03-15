@@ -6,7 +6,7 @@
 #    By: drestles <drestles@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/22 02:59:15 by drestles          #+#    #+#              #
-#    Updated: 2019/03/01 20:55:28 by pcollio-         ###   ########.fr        #
+#    Updated: 2019/03/14 17:34:21 by pcollio-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,6 +55,7 @@ SRC =  ft_strlen.c ft_strdup.c ft_strcpy.c \
 	  printf_handle_lx.c \
 	  printf_handle_p.c \
 	  printf_types.c \
+	  ft_freearr.c \
 
 
 all: $(NAME)

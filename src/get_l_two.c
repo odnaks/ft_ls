@@ -6,30 +6,37 @@
 /*   By: drestles <drestles@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/10 12:56:31 by drestles          #+#    #+#             */
-/*   Updated: 2019/03/10 15:17:21 by drestles         ###   ########.fr       */
+/*   Updated: 2019/03/16 00:53:11 by drestles         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-char	*get_user(const char *path)
+char	*get_user(const char *path, t_ls *ls)
 {
 	struct stat		info;
 	struct passwd	*pw;
 
 	stat(path, &info);
-	pw = getpwuid(info.st_uid);
-	return ((char *)pw->pw_name);
+	if ((pw = getpwuid(info.st_uid)))
+	{
+		if (ls->n)
+			return (ft_itoa(pw->pw_uid));
+		return (ft_strdup((char *)pw->pw_name));
+	}
+	return (ft_strdup("0"));
 }
 
-char	*get_group(const char *path)
+char	*get_group(const char *path, t_ls *ls)
 {
 	struct stat		info;
 	struct group	*gr;
 
 	stat(path, &info);
 	gr = getgrgid(info.st_gid);
-	return ((char *)gr->gr_name);
+	if (ls->n)
+		return (ft_itoa(gr->gr_gid));
+	return (ft_strdup((char *)gr->gr_name));
 }
 
 off_t	get_size(char *path)
@@ -71,8 +78,8 @@ char	*put_link(char *path)
 	{
 		res = ft_strdup(basename(path));
 		res = ft_strjoin_left(res, " -> ");
-		res = ft_strjoin_left(res, basename(realpath(path, NULL)));
+		res = ft_strjoin_left(res, basename(path));
 		return (res);
 	}
-	return (basename(path));
+	return (ft_strdup(basename(path)));
 }

@@ -6,7 +6,7 @@
 /*   By: drestles <drestles@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/21 03:15:52 by drestles          #+#    #+#             */
-/*   Updated: 2019/03/01 20:55:28 by pcollio-         ###   ########.fr       */
+/*   Updated: 2019/03/14 17:34:21 by pcollio-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,5 +144,6 @@ long double			pow_10(int n);
 char				*ft_strjoin_right(char const *s1, char const *s2);
 char				*ft_strjoin_left(char const *s1, char const *s2);
 char				*ft_strjoin_all(char const *s1, char const *s2);
+void				ft_freearr(char **words, int i);
 
 #endif

@@ -6,17 +6,49 @@
 /*   By: drestles <drestles@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/10 13:47:04 by drestles          #+#    #+#             */
-/*   Updated: 2019/03/10 16:00:56 by drestles         ###   ########.fr       */
+/*   Updated: 2019/03/16 00:53:19 by drestles         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_ls.h"
 
-void		put_usage(char a)
+static int	parse_help(t_ls *ls, char a)
 {
-	ft_printf("ls: illegal option -- %c\n", a);
-	ft_printf("usage: ls [-lrRat] [file ...]");
-	exit(1);
+	if (a == 't')
+		ls->t = 1;
+	else if (a == 'o')
+		ls->o = 1;
+	else if (a == '1')
+		ls->one = 1;
+	else if (a == 'f')
+	{
+		ls->f = 1;
+		ls->a = 1;
+	}
+	else if (a == 'n')
+	{
+		ls->n = 1;
+		ls->l = 1;
+	}
+	else
+		put_usage(a);
+	return (0);
+}
+
+void		parse_flags(t_ls *ls, char a)
+{
+	if (a == 'l')
+		ls->l = 1;
+	else if (a == 'r')
+		ls->r = 1;
+	else if (a == 'R')
+		ls->l_r = 1;
+	else if (a == 'A')
+		ls->l_a = 1;
+	else if (a == 'a')
+		ls->a = 1;
+	else if (parse_help(ls, a))
+		;
 }
 
 static void	count_obj(int argc, char **argv, int j, t_ls *ls)

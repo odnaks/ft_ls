@@ -6,7 +6,7 @@
 /*   By: drestles <drestles@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/24 14:53:44 by pcollio-          #+#    #+#             */
-/*   Updated: 2019/03/10 15:00:08 by drestles         ###   ########.fr       */
+/*   Updated: 2019/03/16 00:53:43 by drestles         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,12 @@ typedef struct	s_ls {
 	int		r;
 	int		l_r;
 	int		a;
+	int		l_a;
 	int		t;
+	int		o;
+	int		f;
+	int		n;
+	int		one;
 
 	char	**args;
 	int		index;
@@ -80,18 +85,32 @@ typedef struct	s_ls {
 }				t_ls;
 
 /*
-** format.c
+** foo_foo.c
+*/
+void			l_format_print_dev_help(char *file, t_format *format);
+void			format_max(char *file, t_format *format, t_ls *ls);
+int				format_rows_objs(char **objs, int n, t_ls *ls);
+void			print_dev(t_format *format, char *file, int type);
+
+/*
+** foo.c
 */
 void			init_format(t_format *format);
+void			free_format_mini(t_format *format);
+void			free_format(t_format *format);
+void			put_usage(char a);
+
+/*
+** format.c
+*/
 int				format_rows(t_ls *ls);
-int				format_rows_objs(char **objs, int n, t_ls *ls);
-void			format_max(char *file, t_format *format);
 int				l_format_rows(t_ls *ls);
+void			one_format_rows(t_ls *ls);
+void			one_format_rows_objs(char **objs, int n);
 
 /*
 ** get_l_one.c
 */
-off_t			get_total_size(char **files, t_ls *ls);
 int				get_attr(const char *path);
 char			*get_chmod(char *path);
 int				vtorya_hernya(const char *path);
@@ -102,12 +121,13 @@ int				vtorya_hernya(const char *path);
 int				get_major(char *path);
 int				get_minor(char *path);
 int				get_time(char *f1, char *f2, t_ls *ls);
+off_t			get_total_size(char **files, t_ls *ls);
 
 /*
 ** get_l_two.c
 */
-char			*get_user(const char *path);
-char			*get_group(const char *path);
+char			*get_user(const char *path, t_ls *ls);
+char			*get_group(const char *path, t_ls *ls);
 off_t			get_size(char *path);
 char			*get_last_time(char *path);
 char			*put_link(char *path);
@@ -136,7 +156,7 @@ int				main(int argc, char **argv);
 /*
 ** malloc.c
 */
-int				init_struct(t_ls *ls);
+void			init_struct(t_ls *ls);
 void			malloc_dir(int n, t_ls *ls);
 void			malloc_files(int n, t_ls *ls);
 void			free_files(t_ls *ls);
@@ -145,7 +165,7 @@ void			free_dirs(t_ls *ls);
 /*
 ** parcer.c
 */
-void			put_usage(char a);
+void			parse_flags(t_ls *ls, char a);
 int				parcer(t_ls *ls, int argc, char **argv);
 
 /*
@@ -155,6 +175,11 @@ char			**push_dir_files_to_str(char *path, char **obj, t_ls *ls);
 void			push_dir_files(char *path, t_ls *ls);
 int				push_files(char *args, t_ls *ls);
 int				push_dir(char *args, t_ls *ls);
+
+/*
+** sort_dir.c
+*/
+void			sort_dir(t_ls *ls);
 
 /*
 ** sort_files.c

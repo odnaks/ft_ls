@@ -6,7 +6,7 @@
 /*   By: drestles <drestles@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/10 11:15:07 by pcollio-          #+#    #+#             */
-/*   Updated: 2019/03/10 14:35:13 by drestles         ###   ########.fr       */
+/*   Updated: 2019/03/16 00:53:29 by drestles         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,15 @@ int			is_exist(const char *path)
 
 int			ft_intlen(int n)
 {
-	return (ft_strlen(ft_itoa(n)));
+	int i;
+
+	i = 0;
+	while (n >= 10)
+	{
+		n /= 10;
+		i++;
+	}
+	return (i + 1);
 }
 
 int			max_rows(int columns, int amount)
@@ -53,8 +61,10 @@ int			count_files(const char *path, t_ls *ls)
 	{
 		while ((dir = readdir(d)) != NULL)
 		{
-			if (dir->d_name[0] != '.' || ls->a)
-				count++;
+			if (dir->d_name[0] != '.' || ls->a || ls->l_a)
+				if ((ls->l_a && dir->d_name[1] != '.'
+				&& dir->d_name[1]) || !ls->l_a)
+					count++;
 		}
 		closedir(d);
 	}

@@ -6,7 +6,7 @@
 /*   By: drestles <drestles@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/10 11:14:34 by drestles          #+#    #+#             */
-/*   Updated: 2019/03/10 12:37:15 by drestles         ###   ########.fr       */
+/*   Updated: 2019/03/16 00:53:24 by drestles         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int			sort(t_ls *ls)
 		{
 			if (ls->t)
 				sort_time(ls, i, j);
-			else
+			else if (!ls->f)
 				sort_ascii(ls, i, j);
 			j++;
 		}
@@ -83,5 +83,6 @@ int			sort(t_ls *ls)
 	}
 	if (ls->r)
 		sort_rec(ls);
+	sort_dir(ls);
 	return (0);
 }

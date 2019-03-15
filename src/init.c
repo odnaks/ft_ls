@@ -6,7 +6,7 @@
 /*   By: drestles <drestles@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/10 11:20:38 by pcollio-          #+#    #+#             */
-/*   Updated: 2019/03/10 16:00:16 by drestles         ###   ########.fr       */
+/*   Updated: 2019/03/16 00:53:12 by drestles         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,20 +22,11 @@ int			flags(char *args, t_ls *ls)
 		i++;
 		while (args[i] > 32 && args[i] < 127)
 		{
-			if (args[i] == 'l')
-				ls->l = 1;
-			else if (args[i] == 'r')
-				ls->r = 1;
-			else if (args[i] == 'R')
-				ls->l_r = 1;
-			else if (args[i] == 'a')
-				ls->a = 1;
-			else if (args[i] == 't')
-				ls->t = 1;
-			else
-				put_usage(args[i]);
+			parse_flags(ls, args[i]);
 			i++;
 		}
+		if (ls->a)
+			ls->l_a = 0;
 		return (1);
 	}
 	return (0);
@@ -71,8 +62,12 @@ void		ls_files(t_ls *ls)
 	sort(ls);
 	if (ls->l)
 		l_format_rows(ls);
+	else if (ls->one)
+		one_format_rows(ls);
 	else
 		format_rows(ls);
+	if (ls->index_f > 0)
+		free_files(ls);
 }
 
 void		ls_dir(t_ls *ls)
@@ -85,7 +80,6 @@ void		ls_dir(t_ls *ls)
 	while (k < ls->index_d)
 	{
 		n = count_files(ls->dir[k], ls);
-		free_files(ls);
 		malloc_files(n, ls);
 		ft_printf("\n%s:\n", ls->dir[k]);
 		push_dir_files(ls->dir[k], ls);

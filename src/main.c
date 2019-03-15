@@ -6,7 +6,7 @@
 /*   By: drestles <drestles@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/10 10:01:40 by drestles          #+#    #+#             */
-/*   Updated: 2019/03/10 16:00:39 by drestles         ###   ########.fr       */
+/*   Updated: 2019/03/16 00:53:32 by drestles         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,10 @@ void		ls_rec(char *str, t_ls *ls)
 	int		n;
 
 	objs = ls_rec_init(ls, str, &n);
-	if (ls->l)
+	if (ls->l || ls->o)
 		l_format_rows_objs(objs, n, ls);
+	else if (ls->one)
+		one_format_rows_objs(objs, n);
 	else
 		format_rows_objs(objs, n, ls);
 	ls->rec++;
@@ -69,7 +71,7 @@ void		ls_rec(char *str, t_ls *ls)
 		ls->rec++;
 		rec_rec(ls, str, objs, n);
 	}
-	free(objs);
+	ft_freearr(objs, ft_strlen_two(objs));
 }
 
 int			ft_ls(t_ls *ls, int argc, char **argv)
@@ -89,6 +91,8 @@ int			ft_ls(t_ls *ls, int argc, char **argv)
 		ls_rec(a[i], ls);
 		i++;
 	}
+	ft_freearr(a, i);
+	free(ls->path);
 	return (0);
 }
 
@@ -97,6 +101,8 @@ int			main(int argc, char **argv)
 	t_ls ls;
 
 	init_struct(&ls);
+	if (isatty(1) == 0)
+		ls.one = 1;
 	ft_ls(&ls, argc, argv);
 	return (0);
 }

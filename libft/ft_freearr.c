@@ -1,28 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstiter.c                                       :+:      :+:    :+:   */
+/*   ft_freearr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestles <drestles@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pcollio- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/23 23:44:10 by drestles          #+#    #+#             */
+/*   Created: 2018/12/19 21:09:13 by pcollio-          #+#    #+#             */
 /*   Updated: 2019/03/14 17:34:21 by pcollio-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstiter(t_list *lst, void (*f)(t_list *elem))
+void		ft_freearr(char **words, int i)
 {
-	t_list	*lists;
-
-	lists = lst;
-	while (!lists || !f)
-		return ;
-	while (lists->next)
-	{
-		f(lists);
-		lists = lists->next;
-	}
-	f(lists);
+	while (i--)
+		ft_strdel(&words[i]);
+	free(words);
 }

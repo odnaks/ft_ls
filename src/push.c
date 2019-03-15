@@ -6,7 +6,7 @@
 /*   By: drestles <drestles@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/10 11:08:25 by pcollio-          #+#    #+#             */
-/*   Updated: 2019/03/10 12:51:17 by drestles         ###   ########.fr       */
+/*   Updated: 2019/03/16 00:53:20 by drestles         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,14 @@ char		**push_dir_files_to_str(char *path, char **obj, t_ls *ls)
 	{
 		i = 0;
 		while ((dir = readdir(d)) != NULL)
-			if (dir->d_name[0] != '.' || ls->a)
-				push_files_dir(ls, dir, &obj, &i);
+			if (dir->d_name[0] != '.' || ls->a || ls->l_a)
+				if ((ls->l_a && dir->d_name[1] != '.'
+				&& dir->d_name[1]) || !ls->l_a)
+					push_files_dir(ls, dir, &obj, &i);
 		closedir(d);
 	}
+	else
+		ft_printf("ft_ls: %s: Permission denied\n", basename(path));
 	return (obj);
 }
 
